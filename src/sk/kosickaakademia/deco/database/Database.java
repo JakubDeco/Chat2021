@@ -6,10 +6,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 public class Database {
@@ -95,6 +92,34 @@ public class Database {
         catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean login(String login, String password){
+        if (login == null || login.isBlank())
+            return false;
+        if (password == null || password.isBlank())
+            return false;
+
+        boolean result = false;
+        try {
+            Connection connection = getConnection();
+            String query = "select * from user where login=? and password=?";
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, login);
+            ps.setString(2, getMd5(password));
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next())
+                result = true;
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }
