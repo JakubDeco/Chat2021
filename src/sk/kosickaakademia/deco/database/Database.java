@@ -3,21 +3,24 @@ package sk.kosickaakademia.deco.database;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class Database {
     private String url;
     private String user;
     private String password;
-    private String configFilePath = "resource/config.properties";
 
     public Database(){
-        loadConfig(configFilePath);
+        loadConfig();
     }
 
-    private void loadConfig(String filepath){
+    private void loadConfig(){
         try {
-            InputStream inputStream = new FileInputStream(filepath);
+            InputStream inputStream = new FileInputStream("resource/config.properties");
 
             Properties properties=new Properties();
 
@@ -30,6 +33,38 @@ public class Database {
             e.printStackTrace();
         }
 
+    }
+
+    private Connection getConnection() throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        return DriverManager.getConnection(url,user,password);
+    }
+
+    public boolean insertNewUser(String login, String password){
+        if (login == null || login.isBlank())
+            return false;
+        if (password == null || password.isBlank())
+            return false;
+
+        boolean result = false;
+
+        try {
+            Connection connection = getConnection();
+            String query = "insert into user(login, password) values(?, ?)";
+
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, login);
+            ps.setString(2, password);
+
+            if (ps.executeUpdate() < 1)
+                result = true;
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }
