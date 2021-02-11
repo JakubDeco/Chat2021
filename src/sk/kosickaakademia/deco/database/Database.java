@@ -21,6 +21,7 @@ public class Database {
     private final String changePassword = "update user set password=? where login=? and password=?";
     private final String getUserID = "select id from user where login=?";
     private final String getMyMessages = "select * from message where toUser=?";
+    private final String deleteAllMyMessages = "delete from messages where toUser=?";
 
     public Database(){
         loadConfig();
@@ -219,5 +220,33 @@ public class Database {
         }
 
         return list;
+    }
+
+    public boolean deleteAllMyMessages(String login){
+        boolean result = false;
+        if (login == null || login.isBlank())
+            return result;
+
+        int userID = getUserID(login);
+        if (userID == -1)
+            return result;
+
+        try {
+            Connection connection = getConnection();
+            if (connection == null)
+                return result;
+
+            PreparedStatement ps = connection.prepareStatement(deleteAllMyMessages);
+            ps.setInt(1, userID);
+
+            if (ps.executeUpdate() != 0)
+                result = true;
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
