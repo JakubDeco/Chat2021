@@ -22,6 +22,7 @@ public class Database {
     private final String getUserID = "select id from user where login=?";
     private final String getMyMessages = "select * from message where toUser=?";
     private final String deleteAllMyMessages = "delete from messages where toUser=?";
+    private final String sendMessage = "insert into message(fromUser, toUser, text) values(?, ?, ?)";
 
     public Database(){
         loadConfig();
@@ -248,5 +249,38 @@ public class Database {
         }
 
         return result;
+    }
+
+    public boolean sendMessage(int from, String toUser, String content){
+        if (content == null || content.isBlank())
+            return false;
+
+        int to = getUserID(toUser);
+        if (to == -1)
+            return false;
+
+        try {
+            Connection connection = getConnection();
+            if (connection == null)
+                return false;
+
+            PreparedStatement ps = connection.prepareStatement(sendMessage);
+            ps.setInt(1, from);
+            ps.setInt(2, to);
+            ps.setString(3, content);
+
+            if (ps.executeUpdate() == 0){
+                connection.close();
+                return false;
+            }
+            else {
+                connection.close();
+                return true;
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
