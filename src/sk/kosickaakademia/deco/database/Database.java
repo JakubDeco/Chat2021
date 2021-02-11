@@ -14,6 +14,8 @@ public class Database {
     private String user;
     private String password;
 
+    private String changePassword = "update user set password=? where login=? and password=?";
+
     public Database(){
         loadConfig();
     }
@@ -112,6 +114,36 @@ public class Database {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next())
+                result = true;
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public boolean changePassword(String login, String oldPassword, String newPassword){
+        if (login == null || login.isBlank())
+            return false;
+        if (oldPassword == null || oldPassword.isBlank())
+            return false;
+        if (newPassword == null || newPassword.isBlank())
+            return false;
+
+        boolean result = false;
+        try {
+            Connection connection = getConnection();
+            if (connection == null)
+                return false;
+
+            PreparedStatement ps = connection.prepareStatement(changePassword);
+            ps.setString(1, newPassword);
+            ps.setString(2, login);
+            ps.setString(3, oldPassword);
+
+            if (ps.executeUpdate() != 0)
                 result = true;
 
             connection.close();
