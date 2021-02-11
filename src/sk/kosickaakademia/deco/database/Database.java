@@ -14,7 +14,8 @@ public class Database {
     private String user;
     private String password;
 
-    private String changePassword = "update user set password=? where login=? and password=?";
+    private final String changePassword = "update user set password=? where login=? and password=?";
+    private final String getUserID = "select id from user where login=?";
 
     public Database(){
         loadConfig();
@@ -152,6 +153,31 @@ public class Database {
         }
 
         return result;
+    }
+
+    public int getUserID(String login){
+        int id = -1;
+        if (login == null || login.isBlank())
+            return id;
+
+        try {
+            Connection connection = getConnection();
+            if (connection == null)
+                return id;
+
+            PreparedStatement ps = connection.prepareStatement(getUserID);
+            ps.setString(1, login);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                id = rs.getInt("id");
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return id;
     }
 
 }
