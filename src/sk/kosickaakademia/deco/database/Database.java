@@ -1,5 +1,7 @@
 package sk.kosickaakademia.deco.database;
 
+import sk.kosickaakademia.deco.entity.Message;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +9,8 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Database {
@@ -16,6 +20,7 @@ public class Database {
 
     private final String changePassword = "update user set password=? where login=? and password=?";
     private final String getUserID = "select id from user where login=?";
+    private final String getMyMessages = "select * from message where toUser=?";
 
     public Database(){
         loadConfig();
@@ -180,4 +185,39 @@ public class Database {
         return id;
     }
 
+    public List<Message> getMyMessages(String login){
+        List<Message> list = new ArrayList<>();
+        if (login == null || login.isBlank())
+            return list;
+
+        int userID = getUserID(login);
+        if (userID == -1)
+            return list;
+
+        try {
+            Connection connection = getConnection();
+            if (connection == null)
+                return list;
+
+            PreparedStatement ps = connection.prepareStatement(getMyMessages);
+            ps.setInt(1, userID);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String from = rs.getString("fromUser");
+                String to = rs.getString("toUser");
+                Date date = rs.getDate("dt");
+                String text = rs.getString("text");
+
+                list.add(new Message(id, from, to, date, text));
+            }
+
+            connection.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 }
