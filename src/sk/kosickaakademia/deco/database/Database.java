@@ -66,7 +66,7 @@ public class Database {
             ps.setString(1, login);
             ps.setString(2, getMd5(password));
 
-            if (ps.executeUpdate() < 1)
+            if (ps.executeUpdate() > 0)
                 result = true;
 
             connection.close();
