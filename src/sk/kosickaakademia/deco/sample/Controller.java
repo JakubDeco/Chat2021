@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import sk.kosickaakademia.deco.database.Database;
+import sk.kosickaakademia.deco.entity.User;
 
 public class Controller {
     public TextField loginField;
@@ -13,6 +15,19 @@ public class Controller {
     public PasswordField passwordField;
 
     public void clickSignIn(MouseEvent mouseEvent) {
-        System.out.println("huraaa");
+        String login = loginField.getText().trim();
+        String password = passwordField.getText().trim();
+
+        User user = new Database().login(login, password);
+
+        if (user == null) {
+            failedSignInLabel.setVisible(true);
+            System.out.println("login unsuccessful");
+        }
+        else {
+            failedSignInLabel.setVisible(false);
+            System.out.println("login successful");
+            //todo login is not case sensitive
+        }
     }
 }
