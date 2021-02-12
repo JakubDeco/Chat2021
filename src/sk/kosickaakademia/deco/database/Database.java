@@ -1,6 +1,7 @@
 package sk.kosickaakademia.deco.database;
 
 import sk.kosickaakademia.deco.entity.Message;
+import sk.kosickaakademia.deco.entity.User;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -104,13 +105,13 @@ public class Database {
         }
     }
 
-    public boolean login(String login, String password){
+    public User login(String login, String password){
         if (login == null || login.isBlank())
-            return false;
+            return null;
         if (password == null || password.isBlank())
-            return false;
+            return null;
 
-        boolean result = false;
+        User result = null;
         try {
             Connection connection = getConnection();
             String query = "select * from user where login=? and password=?";
@@ -121,8 +122,13 @@ public class Database {
 
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next())
-                result = true;
+            if (rs.next()){
+                int id = rs.getInt("id");
+                String hashPassword = rs.getString("password");
+
+                result = new User(id, login, hashPassword);
+            }
+
 
             connection.close();
         } catch (ClassNotFoundException | SQLException e) {
