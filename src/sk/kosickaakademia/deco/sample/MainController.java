@@ -1,11 +1,12 @@
 package sk.kosickaakademia.deco.sample;
 
 
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import sk.kosickaakademia.deco.database.Database;
 
 public class MainController {
 
@@ -23,7 +24,16 @@ public class MainController {
         loginName.setText(name);
     }
 
-    public void sendMessage(MouseEvent mouseEvent) {
+    public void sendMessage(ActionEvent mouseEvent) {
+        Database database = new Database();
 
+        int from = database.getUserID(loginName.getText());
+        String to = recipient.getText();
+        String contents = newMessage.getText();
+
+        if (from == -1 || to == null || to.isBlank() || contents == null || contents.isBlank())
+            return;
+
+        System.out.println(database.sendMessage(from,to,contents));
     }
 }

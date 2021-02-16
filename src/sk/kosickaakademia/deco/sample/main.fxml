@@ -21,6 +21,6 @@
       <ScrollBar layoutX="475.0" layoutY="81.0" orientation="VERTICAL" prefHeight="138.0" prefWidth="14.0" />
       <TextField fx:id="recipient" layoutX="41.0" layoutY="249.0" prefHeight="25.0" prefWidth="80.0" />
       <TextField fx:id="newMessage" layoutX="126.0" layoutY="249.0" prefHeight="25.0" prefWidth="316.0" />
-      <Button fx:id="sendBtn" layoutX="443.0" layoutY="249.0" mnemonicParsing="false" onMouseClicked="#sendMessage" text="Send" />
+      <Button fx:id="sendBtn" layoutX="443.0" layoutY="249.0" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
    </children>
 </Pane>
