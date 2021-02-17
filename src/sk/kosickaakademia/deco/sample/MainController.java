@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import sk.kosickaakademia.deco.database.Database;
+import sk.kosickaakademia.deco.entity.Message;
+
+import java.util.List;
 
 public class MainController {
 
@@ -17,6 +20,7 @@ public class MainController {
     public TextField recipient;
     public TextField newMessage;
     public Label sendErrorLbl;
+    public Label refreshLbl;
 
     public void setLoginNameText(String name){
         if (name == null || name.isBlank())
@@ -43,5 +47,21 @@ public class MainController {
         else {
             sendErrorLbl.setVisible(true);
         }
+    }
+
+    public void refreshMessages(ActionEvent actionEvent) {
+        Database database = new Database();
+        List<Message> messages = database.getMyMessages(loginName.getText());
+        if (messages == null || messages.isEmpty()){            
+            refreshLbl.setVisible(true);
+            inboxTextField.setText("");
+        }
+        else {
+            for (Message temp :
+                    messages) {
+                
+            }
+        }
+            
     }
 }
