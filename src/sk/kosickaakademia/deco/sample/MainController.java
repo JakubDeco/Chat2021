@@ -16,6 +16,7 @@ public class MainController {
     public Button sendBtn;
     public TextField recipient;
     public TextField newMessage;
+    public Label sendErrorLbl;
 
     public void setLoginNameText(String name){
         if (name == null || name.isBlank())
@@ -34,6 +35,13 @@ public class MainController {
         if (from == -1 || to == null || to.isBlank() || contents == null || contents.isBlank())
             return;
 
-        System.out.println(database.sendMessage(from,to,contents));
+        if (database.sendMessage(from,to,contents)){
+            newMessage.setText("");
+            recipient.setText("");
+            sendErrorLbl.setVisible(false);
+        }
+        else {
+            sendErrorLbl.setVisible(true);
+        }
     }
 }

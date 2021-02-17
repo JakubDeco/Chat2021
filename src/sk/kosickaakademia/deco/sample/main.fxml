@@ -22,5 +22,6 @@
       <TextField fx:id="recipient" layoutX="41.0" layoutY="249.0" prefHeight="25.0" prefWidth="80.0" />
       <TextField fx:id="newMessage" layoutX="126.0" layoutY="249.0" prefHeight="25.0" prefWidth="316.0" />
       <Button fx:id="sendBtn" layoutX="443.0" layoutY="249.0" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
+      <Label fx:id="sendErrorLbl" layoutX="295.0" layoutY="225.0" prefHeight="17.0" prefWidth="191.0" text="Invalid recipient or empty message" textFill="#ff2d2d" visible="false" />
    </children>
 </Pane>
