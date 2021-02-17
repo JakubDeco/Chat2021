@@ -21,7 +21,10 @@ public class Database {
 
     private final String changePassword = "update user set password=? where login=? and password=?";
     private final String getUserID = "select id from user where login=?";
-    private final String getMyMessages = "select * from message where toUser=?";
+    private final String getMyMessages = "select message.id, dt, from_user.login as sender, to_user.login as receiver, text from message" +
+            " inner join user from_user on from_user.id = message.fromUser" +
+            " inner join user to_user on to_user.id = message.toUser" +
+            " where toUser=?";
     private final String deleteAllMyMessages = "delete from messages where toUser=?";
     private final String sendMessage = "insert into message(fromUser, toUser, text) values(?, ?, ?)";
 
@@ -212,9 +215,9 @@ public class Database {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()){
-                int id = rs.getInt("id");
-                String from = rs.getString("fromUser");
-                String to = rs.getString("toUser");
+                int id = rs.getInt("message.id");
+                String from = rs.getString("sender");
+                String to = rs.getString("receiver");
                 Date date = rs.getDate("dt");
                 String text = rs.getString("text");
 
