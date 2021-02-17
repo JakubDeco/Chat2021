@@ -57,11 +57,15 @@ public class MainController {
             inboxTextField.setText("");
         }
         else {
+            StringBuilder sb = new StringBuilder();
             for (Message temp :
                     messages) {
-                
+                sb.append(temp.getDate()).append(" ");
+                sb.append(temp.getFrom()).append(":    ");
+                sb.append(temp.getContent()).append("\n");
             }
+            inboxTextField.setText(sb.toString());
+            database.deleteAllMyMessages(loginName.getText());
         }
-            
     }
 }

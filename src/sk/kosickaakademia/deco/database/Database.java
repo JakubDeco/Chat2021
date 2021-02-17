@@ -25,7 +25,7 @@ public class Database {
             " inner join user from_user on from_user.id = message.fromUser" +
             " inner join user to_user on to_user.id = message.toUser" +
             " where toUser=?";
-    private final String deleteAllMyMessages = "delete from messages where toUser=?";
+    private final String deleteAllMyMessages = "delete from message where toUser=?";
     private final String sendMessage = "insert into message(fromUser, toUser, text) values(?, ?, ?)";
 
     public Database(){
