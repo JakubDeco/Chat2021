@@ -81,7 +81,7 @@ public class Database {
         return result;
     }
 
-    public static String getMd5(String input) {
+    public String getMd5(String input) {
         try {
 
             // Static getInstance method is called with hashing MD5
