@@ -156,9 +156,9 @@ public class Database {
                 return false;
 
             PreparedStatement ps = connection.prepareStatement(changePassword);
-            ps.setString(1, newPassword);
+            ps.setString(1, getMd5(newPassword));
             ps.setString(2, login);
-            ps.setString(3, oldPassword);
+            ps.setString(3, getMd5(oldPassword));
 
             if (ps.executeUpdate() != 0)
                 result = true;

@@ -86,4 +86,20 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    public void openChangePwd(ActionEvent actionEvent) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("changePwd.fxml"));
+            Parent root = fxmlLoader.load();
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Chat 2021 App");
+            primaryStage.setScene(new Scene(root, 480, 300));
+            primaryStage.show();
+
+            ChangePwd controller = fxmlLoader.getController();
+            controller.loginLbl.setText(loginName.getText());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

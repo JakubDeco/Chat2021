@@ -6,10 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import sk.kosickaakademia.deco.database.Database;
 
-public class ChangePsswd {
-    public PasswordField oldPasswordField;
-    public PasswordField newPasswordField;
-    public PasswordField confirmPasswordField;
+public class ChangePwd {
+    public PasswordField oldPwdField;
+    public PasswordField newPwdField;
+    public PasswordField confirmPwdField;
     public Button submitBtn;
     public Label submitLbl;
     public Label loginLbl;
@@ -17,17 +17,26 @@ public class ChangePsswd {
 
     public void changePassword(ActionEvent actionEvent) {
         Database database = new Database();
-        String oldP = oldPasswordField.getText();
-        String newP = newPasswordField.getText();
-        String confirmP = confirmPasswordField.getText();
+        String oldP = oldPwdField.getText();
+        String newP = newPwdField.getText();
+        String confirmP = confirmPwdField.getText();
 
         if (!newP.equals(confirmP)){
             submitLbl.setVisible(true);
+            oldPwdField.setText("");
+            newPwdField.setText("");
+            confirmPwdField.setText("");
             return;
         }
         if (database.changePassword(loginLbl.getText(), oldP, newP)){
             submitLbl.setVisible(false);
+            submitLbl.getScene().getWindow().hide();
         }
-        else submitLbl.setVisible(true);
+        else {
+            submitLbl.setVisible(true);
+            oldPwdField.setText("");
+            newPwdField.setText("");
+            confirmPwdField.setText("");
+        }
     }
 }
